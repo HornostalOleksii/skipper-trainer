@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B2032">
+<title>Кермо — тренажер судноводія</title>
+<meta name="description" content="Тренажер для підготовки до іспиту судноводія прогулянкового/малого судна: 435 питань, теми, тести на 10 питань і повторення помилок.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AD%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="chart-grid" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="compass" viewBox="0 0 48 48" aria-hidden="true">
+      <circle cx="24" cy="24" r="20.5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="24" cy="24" r="1.8" fill="currentColor"/>
+      <path d="M24 5.5 L27 22 L24 24 L21 22 Z" fill="currentColor"/>
+      <path d="M24 42.5 L21 26 L24 24 L27 26 Z" fill="currentColor" opacity="0.35"/>
+      <path d="M5.5 24 L22 22.6 L22 25.4 Z" fill="currentColor" opacity="0.6"/>
+      <path d="M42.5 24 L26 25.4 L26 22.6 Z" fill="currentColor" opacity="0.6"/>
+    </svg>
+    <div class="brand-text">
+      <p class="brand-name">Кермо</p>
+      <p class="brand-tag">Тренажер судноводія</p>
+    </div>
+  </div>
+  <button id="navHome" class="link-btn" hidden>На головну</button>
+</header>
+
+<main id="app">
+
+  <!-- ===================== HOME ===================== -->
+  <section id="screen-home" class="screen">
+
+    <div id="resumeBanner" class="resume-banner" hidden>
+      <h3>Продовжити</h3>
+      <div id="resumeList" class="resume-list"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Усі питання поспіль</h2>
+      <p class="muted">435 питань по порядку документа. Прогрес зберігається автоматично — можна повертатись коли завгодно.</p>
+      <button class="btn btn-primary" id="startAll" type="button">Почати</button>
+    </div>
+
+    <div class="panel">
+      <h2>Тема поспіль</h2>
+      <p class="muted">Пройти всі питання однієї теми по черзі, від початку до кінця.</p>
+      <label class="field-label" for="topicSequential">Тема</label>
+      <select id="topicSequential"></select>
+      <button class="btn btn-primary" id="startTopic" type="button">Почати</button>
+    </div>
+
+    <div class="panel">
+      <h2>Тест на 10 питань</h2>
+      <p class="muted">Оберіть одну або декілька тем — питання виберуться випадково з обраного. Прохідний бал: щонайменше 7 з 10.</p>
+      <div id="topicChecklist" class="topic-checklist"></div>
+      <button class="btn btn-primary" id="startTest10" type="button">Почати тест</button>
+    </div>
+
+    <div class="panel" id="reviewPanel">
+      <h2>Повторити помилки</h2>
+      <p class="muted" id="reviewText">Завантаження…</p>
+      <button class="btn btn-primary" id="startReview" type="button" disabled>Повторити</button>
+    </div>
+
+    <div class="panel stats-panel">
+      <h2>Статистика</h2>
+      <div id="statsOverall" class="stats-overall"></div>
+      <div id="statsTopics" class="stats-topics"></div>
+      <h3>Останні тести</h3>
+      <div id="statsHistory" class="stats-history"></div>
+      <button class="link-btn danger" id="resetData" type="button">Скинути весь прогрес</button>
+    </div>
+
+  </section>
+
+  <!-- ===================== QUIZ ===================== -->
+  <section id="screen-quiz" class="screen" hidden>
+
+    <div class="quiz-meta">
+      <span id="quizTopicBadge" class="badge"></span>
+      <span id="quizProgress" class="progress-text"></span>
+    </div>
+    <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+    <article class="question-card">
+      <p id="qNumber" class="q-number"></p>
+      <h2 id="qText" class="q-text"></h2>
+      <div id="qImageWrap" class="q-image-wrap" hidden>
+        <img id="qImage" alt="Ілюстрація до питання" loading="lazy">
+      </div>
+      <p id="qUnverified" class="unverified-note" hidden>⚠ Відповідь визначена додатково й не підтверджена офіційним джерелом</p>
+      <div id="optionsList" class="options-list"></div>
+    </article>
+
+    <div class="quiz-actions">
+      <button class="link-btn" id="quitQuiz" type="button">Вийти в меню</button>
+      <button class="btn btn-primary" id="nextBtn" type="button" disabled>Далі</button>
+    </div>
+
+  </section>
+
+  <!-- ===================== SUMMARY ===================== -->
+  <section id="screen-summary" class="screen" hidden>
+
+    <div id="summaryBanner" class="summary-banner">
+      <p id="summaryScoreBig" class="summary-score"></p>
+      <p id="summaryStatus" class="summary-status"></p>
+    </div>
+
+    <div id="summaryList" class="summary-list"></div>
+
+    <div class="summary-actions">
+      <button class="btn btn-secondary" id="summaryRetryWrong" type="button" hidden>Повторити лише помилки</button>
+      <button class="btn btn-primary" id="summaryHome" type="button">У меню</button>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>435 питань зі збірки для іспиту судноводія прогулянкового/малого судна. Прогрес і статистика зберігаються лише у вашому браузері (localStorage) — нікуди не надсилаються.</p>
+</footer>
+
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
