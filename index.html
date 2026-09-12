@@ -50,6 +50,15 @@
     </div>
 
     <div class="panel">
+      <h2>Перейти до питання</h2>
+      <p class="muted">Відкрити конкретне питання за номером (1–435), не чекаючи, поки воно трапиться по черзі.</p>
+      <label class="field-label" for="jumpNumber">Номер питання</label>
+      <input class="text-input" id="jumpNumber" type="number" min="1" max="435" inputmode="numeric" placeholder="Напр. 413">
+      <p class="muted jump-error" id="jumpError" hidden></p>
+      <button class="btn btn-primary" id="jumpToNumber" type="button">Перейти</button>
+    </div>
+
+    <div class="panel">
       <h2>Тема поспіль</h2>
       <p class="muted">Пройти всі питання однієї теми по черзі, від початку до кінця.</p>
       <label class="field-label" for="topicSequential">Тема</label>

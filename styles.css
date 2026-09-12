@@ -179,6 +179,22 @@ select{
   background-repeat:no-repeat;
 }
 
+.text-input{
+  width:100%;
+  font:inherit;
+  font-size:0.95rem;
+  color:var(--ink);
+  background:#fff;
+  border:1px solid rgba(22,40,58,0.25);
+  border-radius:var(--radius-sm);
+  padding:10px 12px;
+  margin-bottom:14px;
+}
+.jump-error{
+  margin:-8px 0 14px;
+  color:var(--danger);
+}
+
 /* buttons */
 .btn{
   font:inherit;

@@ -175,6 +175,12 @@ function wireStaticEvents() {
   document.getElementById('navHome').addEventListener('click', () => { renderHome(); switchScreen('home'); });
 
   document.getElementById('startAll').addEventListener('click', startAllSequential);
+  document.getElementById('jumpToNumber').addEventListener('click', () => {
+    jumpToQuestionNumber(document.getElementById('jumpNumber').value);
+  });
+  document.getElementById('jumpNumber').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') jumpToQuestionNumber(document.getElementById('jumpNumber').value);
+  });
   document.getElementById('startTopic').addEventListener('click', () => {
     const sel = document.getElementById('topicSequential');
     if (sel.value) startTopicSequential(sel.value);
@@ -395,6 +401,21 @@ function startAllSequential() {
     saveStore();
   }
   beginSession({ mode: 'all', topics: ['Усі теми'], order: r.order, startIndex: r.index, resumeKey: 'all' });
+}
+
+function jumpToQuestionNumber(rawValue) {
+  const errEl = document.getElementById('jumpError');
+  const n = parseInt(rawValue, 10);
+  const q = QUESTIONS.find(x => x.number === n);
+  if (!rawValue || Number.isNaN(n) || !q) {
+    errEl.textContent = 'Немає питання з таким номером.';
+    errEl.hidden = false;
+    return;
+  }
+  errEl.hidden = true;
+  const order = QUESTIONS.map(x => x.id);
+  const startIndex = order.indexOf(q.id);
+  beginSession({ mode: 'all', topics: ['Усі теми'], order, startIndex, resumeKey: null });
 }
 
 function startTopicSequential(topic) {
