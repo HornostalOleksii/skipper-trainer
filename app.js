@@ -6,8 +6,8 @@
 const STORAGE_KEY = 'kermoTrainerV1';
 const TEST_LEN = 10;
 const PASS_THRESHOLD = 7;
-const MASTER_STREAK = 3;                 // correct answers in a row -> question leaves the review pool
-const REVIEW_INTERVAL_DAYS = [1, 3, 7];  // spacing after 1st / 2nd / 3rd correct repeat
+const MASTER_STREAK = 5;                       // correct answers in a row -> question leaves the review pool
+const REVIEW_INTERVAL_DAYS = [1, 2, 4, 12];    // spacing after 1st / 2nd / 3rd / 4th correct repeat
 const HISTORY_LIMIT = 30;
 const LETTERS = ['А', 'Б', 'В', 'Г', 'Д'];
 
@@ -37,6 +37,7 @@ let TOPICS_PRESENT = [];
 let store = null;
 let session = null;         // active quiz session, see beginSession()
 let currentShuffle = null;  // { order:[srcIdx...], texts:[...], correctIndex }
+let historyExpanded = false;
 let answered = false;
 
 /* ==========================================================================
@@ -190,6 +191,10 @@ function wireStaticEvents() {
     if (chosen.length) startTest10(chosen);
   });
   document.getElementById('startReview').addEventListener('click', startReview);
+  document.getElementById('toggleHistory').addEventListener('click', () => {
+    historyExpanded = !historyExpanded;
+    renderStats();
+  });
   document.getElementById('resetData').addEventListener('click', () => {
     if (confirm('Весь прогрес, статистика та історія тестів будуть видалені з цього браузера. Продовжити?')) {
       store = defaultStore();
@@ -355,11 +360,15 @@ function renderStats() {
   }
 
   const histWrap = document.getElementById('statsHistory');
+  const toggleBtn = document.getElementById('toggleHistory');
+  const collapsedCount = 8;
   if (!store.history.length) {
     histWrap.innerHTML = '<p class="empty-note">Тестів ще не було.</p>';
+    toggleBtn.hidden = true;
   } else {
     histWrap.innerHTML = '';
-    store.history.slice(0, 8).forEach(h => {
+    const shown = historyExpanded ? store.history : store.history.slice(0, collapsedCount);
+    shown.forEach(h => {
       const row = document.createElement('div');
       row.className = 'history-row';
       const date = new Date(h.date);
@@ -378,6 +387,15 @@ function renderStats() {
       `;
       histWrap.appendChild(row);
     });
+
+    if (store.history.length > collapsedCount) {
+      toggleBtn.hidden = false;
+      toggleBtn.textContent = historyExpanded
+        ? 'Згорнути історію'
+        : `Показати всю історію (${store.history.length})`;
+    } else {
+      toggleBtn.hidden = true;
+    }
   }
 }
 

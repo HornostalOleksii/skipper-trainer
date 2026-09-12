@@ -154,6 +154,13 @@ main{
   color:var(--ink-soft);
   max-width:52ch;
 }
+.panel .link-btn:not(.danger){
+  display:block;
+  margin:2px 0 12px;
+  padding:8px 4px 8px 0;
+  color:var(--ink-soft);
+}
+.panel .link-btn:not(.danger):hover{ color:var(--ink); }
 
 .field-label{
   display:block;
